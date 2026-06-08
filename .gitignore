@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+
+# production build
+out/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+
+# env
+.env
+.env*.local
+
+# Playwright CLI session recordings
+.playwright-cli/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# test screenshots
+mobile-test.png
+tutorial-view.png
+welcome-after.png
+welcome-test.png
+
+# TypeScript build info
+tsconfig.tsbuildinfo

@@ -1,0 +1,347 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Industrial Precision — VS Code-inspired dark theme
+   Refined for the Yocto Interactive Tutorial
+   ============================================================ */
+
+@theme {
+  /* Surface hierarchy */
+  --color-surface-0: #0d0e10;
+  --color-surface-1: #16181b;
+  --color-surface-2: #1e2024;
+  --color-surface-3: #26282d;
+  --color-surface-4: #2e3036;
+  --color-surface-5: #363840;
+
+  /* Text hierarchy */
+  --color-text-primary: #d4d6da;
+  --color-text-secondary: #92959e;
+  --color-text-tertiary: #6b6e77;
+  --color-text-disabled: #484b53;
+
+  /* Accent — electric blue */
+  --color-accent: #3399ff;
+  --color-accent-dim: #2678cc;
+  --color-accent-glow: rgba(51, 153, 255, 0.15);
+
+  /* Semantic colors — refined */
+  --color-success: #3fb950;
+  --color-warning: #d29922;
+  --color-error: #f85149;
+  --color-info: #58a6ff;
+
+  /* Syntax highlighting */
+  --color-syntax-keyword: #c792ea;
+  --color-syntax-string: #c3e88d;
+  --color-syntax-comment: #546e7a;
+  --color-syntax-number: #f78c6c;
+  --color-syntax-function: #82aaff;
+  --color-syntax-type: #ffcb6b;
+  --color-syntax-variable: #eeffff;
+  --color-syntax-preprocessor: #89ddff;
+  --color-syntax-bitbake: #7c9ce0;
+
+  /* Borders & dividers */
+  --color-border: #2a2d33;
+  --color-border-active: #444a56;
+
+  /* Keep some backward compat names for existing components */
+  --color-vscode-bg: var(--color-surface-2);
+  --color-vscode-sidebar: var(--color-surface-1);
+  --color-vscode-sidebar-active: var(--color-surface-4);
+  --color-vscode-tab: var(--color-surface-3);
+  --color-vscode-tab-active: var(--color-surface-2);
+  --color-vscode-terminal: var(--color-surface-0);
+  --color-vscode-status: var(--color-accent);
+  --color-vscode-status-bg: var(--color-accent);
+  --color-vscode-text: var(--color-text-primary);
+  --color-vscode-text-muted: var(--color-text-secondary);
+  --color-vscode-accent: var(--color-accent);
+  --color-vscode-accent-hover: var(--color-accent-dim);
+  --color-vscode-border: var(--color-border);
+  --color-vscode-green: var(--color-success);
+  --color-vscode-yellow: var(--color-warning);
+  --color-vscode-orange: #ce9178;
+  --color-vscode-blue: #569cd6;
+  --color-vscode-purple: var(--color-syntax-keyword);
+  --color-vscode-red: var(--color-error);
+  --color-panel-bg: rgba(30, 32, 36, 0.92);
+  --color-panel-border: var(--color-border);
+
+  /* Typography */
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "IBM Plex Mono", "Consolas", monospace;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================================
+   Base styles
+   ============================================================ */
+
+html, body {
+  background: var(--color-surface-0);
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Subtle grain overlay for atmosphere */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   xterm.js overrides
+   ============================================================ */
+
+.xterm {
+  padding: 10px;
+  height: 100%;
+}
+
+.xterm .xterm-viewport {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.xterm-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+.xterm-viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+.xterm-viewport::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+.xterm-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--color-surface-5);
+}
+
+/* ============================================================
+   Custom scrollbars
+   ============================================================ */
+
+.code-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+.code-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.code-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.code-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+.code-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-surface-5);
+}
+
+.tree-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+.tree-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.tree-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tree-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+.panel-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes stepPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(51, 153, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(51, 153, 255, 0);
+  }
+}
+
+.step-active {
+  animation: stepPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glitchIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  2% {
+    opacity: 0.3;
+    transform: translateX(2px);
+  }
+  4% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  6% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Stagger children animations */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+
+/* ============================================================
+   Welcome / Completion gradients
+   ============================================================ */
+
+.bg-yocto-gradient {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(51, 153, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(63, 185, 80, 0.05) 0%, transparent 60%),
+    var(--color-surface-1);
+}
+
+/* Subtle circuit-board-like grid pattern for welcome/completion */
+.bg-yocto-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ============================================================
+   Interactive states
+   ============================================================ */
+
+.hover-lift {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Terminal scanline effect */
+.terminal-scanline {
+  position: relative;
+}
+.terminal-scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Pulse dot for active build indicator */
+@keyframes buildPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.build-pulse {
+  animation: buildPulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   Focus states — keyboard accessibility
+   ============================================================ */
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   Reduced motion — respect user preference
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

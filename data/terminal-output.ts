@@ -84,11 +84,11 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "mkdir -p ~/yuhesen_ugv/sources ~/yuhesen_ugv/downloads ~/yuhesen_ugv/sstate-cache",
+        text: "mkdir -p ~/my_project/sources ~/my_project/downloads ~/my_project/sstate-cache",
       },
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv && ls -la",
+        text: "cd ~/my_project && ls -la",
         delay: 300,
       },
       {
@@ -124,7 +124,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv/sources && git clone -b kirkstone https://git.yoctoproject.org/poky.git",
+        text: "cd ~/my_project/sources && git clone -b kirkstone https://git.yoctoproject.org/poky.git",
       },
       {
         type: "output",
@@ -236,7 +236,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv/sources/poky && source oe-init-build-env ../../build",
+        text: "cd ~/my_project/sources/poky && source oe-init-build-env ../../build",
       },
       {
         type: "output",
@@ -316,7 +316,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv/build && ls -la conf/",
+        text: "cd ~/my_project/build && ls -la conf/",
         delay: 200,
       },
       {
@@ -434,11 +434,11 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "output",
-        text: "DL_DIR = \"/home/nafis/yuhesen_ugv/downloads\"",
+        text: "DL_DIR = \"/home/johndoe/my_project/downloads\"",
       },
       {
         type: "output",
-        text: "SSTATE_DIR = \"/home/nafis/yuhesen_ugv/sstate-cache\"",
+        text: "SSTATE_DIR = \"/home/johndoe/my_project/sstate-cache\"",
       },
       {
         type: "output",
@@ -458,16 +458,16 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "wc -l meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
+        text: "wc -l meta-my_project/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
         delay: 200,
       },
       {
         type: "output",
-        text: "257 meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
+        text: "257 meta-my_project/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
       },
       {
         type: "command",
-        text: "head -12 meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
+        text: "head -12 meta-my_project/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
         delay: 300,
       },
       {
@@ -488,7 +488,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "output",
-        text: " * This is a yuhesen_ugv kernel module that registers with the Linux IIO",
+        text: " * This is a my_project kernel module that registers with the Linux IIO",
       },
       {
         type: "output",
@@ -516,7 +516,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "ls -la meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/",
+        text: "ls -la meta-my_project/recipes-kernel/mock-adxl345/files/",
         delay: 200,
       },
       {
@@ -565,7 +565,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cat meta-yuhesen_ugv/recipes-kernel/mock-adxl345/mock-adxl345_1.0.bb",
+        text: "cat meta-my_project/recipes-kernel/mock-adxl345/mock-adxl345_1.0.bb",
         delay: 400,
       },
       {
@@ -606,16 +606,16 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "wc -l meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
+        text: "wc -l meta-my_project/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
         delay: 200,
       },
       {
         type: "output",
-        text: "144 meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
+        text: "144 meta-my_project/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
       },
       {
         type: "command",
-        text: "head -8 meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
+        text: "head -8 meta-my_project/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
         delay: 300,
       },
       {
@@ -660,7 +660,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cat meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/mock-adxl345-app.bb",
+        text: "cat meta-my_project/recipes-apps/mock-adxl345-app/mock-adxl345-app.bb",
         delay: 400,
       },
       {
@@ -705,12 +705,12 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cat meta-yuhesen_ugv/recipes-core/images/yuhesen-ugv-image.bb",
+        text: "cat meta-my_project/recipes-core/images/my-project-image.bb",
         delay: 400,
       },
       {
         type: "output",
-        text: "SUMMARY = \"Yuhesen UGV Image with mock-adxl345 driver\"",
+        text: "SUMMARY = \"My Project Image with mock-adxl345 driver\"",
       },
       {
         type: "output",
@@ -750,7 +750,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv/build && bitbake mock-adxl345-app",
+        text: "cd ~/my_project/build && bitbake mock-adxl345-app",
       },
       {
         type: "output",
@@ -815,7 +815,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv/build && nano conf/bblayers.conf",
+        text: "cd ~/my_project/build && nano conf/bblayers.conf",
         delay: 300,
       },
       {
@@ -825,7 +825,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "command",
-        text: "cat >> conf/bblayers.conf << 'EOF'\nBBLAYERS ?= \" \\\n  /home/nafis/yuhesen_ugv/sources/poky/meta \\\n  /home/nafis/yuhesen_ugv/sources/poky/meta-poky \\\n  /home/nafis/yuhesen_ugv/sources/poky/meta-yocto-bsp \\\n  /home/nafis/yuhesen_ugv/sources/meta-openembedded/meta-oe \\\n  /home/nafis/yuhesen_ugv/sources/meta-openembedded/meta-python \\\n  /home/nafis/yuhesen_ugv/sources/meta-openembedded/meta-networking \\\n  /home/nafis/yuhesen_ugv/sources/meta-freescale \\\n  /home/nafis/yuhesen_ugv/sources/meta-imx/meta-imx \\\n  /home/nafis/yuhesen_ugv/meta-yuhesen_ugv \\\n\"\nEOF",
+        text: "cat >> conf/bblayers.conf << 'EOF'\nBBLAYERS ?= \" \\\n  /home/johndoe/my_project/sources/poky/meta \\\n  /home/johndoe/my_project/sources/poky/meta-poky \\\n  /home/johndoe/my_project/sources/poky/meta-yocto-bsp \\\n  /home/johndoe/my_project/sources/meta-openembedded/meta-oe \\\n  /home/johndoe/my_project/sources/meta-openembedded/meta-python \\\n  /home/johndoe/my_project/sources/meta-openembedded/meta-networking \\\n  /home/johndoe/my_project/sources/meta-freescale \\\n  /home/johndoe/my_project/sources/meta-imx/meta-imx \\\n  /home/johndoe/my_project/meta-my_project \\\n\"\nEOF",
         delay: 800,
       },
       {
@@ -847,15 +847,15 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "output",
-        text: "meta                  /home/nafis/yuhesen_ugv/sources/poky/meta  5",
+        text: "meta                  /home/johndoe/my_project/sources/poky/meta  5",
       },
       {
         type: "output",
-        text: "meta-poky             /home/nafis/yuhesen_ugv/sources/poky/meta-poky  5",
+        text: "meta-poky             /home/johndoe/my_project/sources/poky/meta-poky  5",
       },
       {
         type: "output",
-        text: "meta-yocto-bsp        /home/nafis/yuhesen_ugv/sources/poky/meta-yocto-bsp  5",
+        text: "meta-yocto-bsp        /home/johndoe/my_project/sources/poky/meta-yocto-bsp  5",
       },
       {
         type: "output",
@@ -879,7 +879,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "output",
-        text: "meta-yuhesen-ugv      .../meta-yuhesen_ugv                      5",
+        text: "meta-my-project      .../meta-my_project                      5",
         delay: 500,
       },
       {
@@ -899,21 +899,31 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv && mkdir -p meta-yuhesen_ugv/conf \\\n  meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files \\\n  meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/files \\\n  meta-yuhesen_ugv/recipes-core/images",
+        text: "cd ~/my_project && mkdir -p meta-my_project/conf \\\n  meta-my_project/recipes-kernel/linux/linux-yocto \\\n  meta-my_project/recipes-kernel/mock-adxl345/files \\\n  meta-my_project/recipes-apps/mock-adxl345-app/files \\\n  meta-my_project/recipes-core/images",
       },
       {
         type: "command",
-        text: "cat > meta-yuhesen_ugv/conf/layer.conf << 'EOF'\nBBPATH .= \":${LAYERDIR}\"\nBBFILES += \"${LAYERDIR}/recipes-*/*/*.bb \\\n            ${LAYERDIR}/recipes-*/*/*.bbappend\"\nBBFILE_COLLECTIONS += \"yuhesen-ugv\"\nBBFILE_PATTERN_yuhesen-ugv = \"^${LAYERDIR}/\"\nBBFILE_PRIORITY_yuhesen-ugv = \"5\"\nLAYERDEPENDS_yuhesen-ugv = \"core\"\nLAYERSERIES_COMPAT_yuhesen-ugv = \"kirkstone\"\nEOF",
+        text: "cat > meta-my_project/conf/layer.conf << 'EOF'\nBBPATH .= \":${LAYERDIR}\"\nBBFILES += \"${LAYERDIR}/recipes-*/*/*.bb \\\n            ${LAYERDIR}/recipes-*/*/*.bbappend\"\nBBFILE_COLLECTIONS += \"my-project\"\nBBFILE_PATTERN_my-project = \"^${LAYERDIR}/\"\nBBFILE_PRIORITY_my-project = \"5\"\nLAYERDEPENDS_my-project = \"core\"\nLAYERSERIES_COMPAT_my-project = \"kirkstone\"\nEOF",
         delay: 800,
       },
       {
         type: "command",
-        text: "tree meta-yuhesen_ugv",
+        text: "cat > meta-my_project/recipes-kernel/linux/linux-yocto_%.bbappend << 'EOF'\nFILESEXTRAPATHS:prepend := \"${THISDIR}/${PN}:\"\nSRC_URI += \"file://iio.cfg\"\nEOF",
+        delay: 600,
+      },
+      {
+        type: "command",
+        text: "cat > meta-my_project/recipes-kernel/linux/linux-yocto/iio.cfg << 'EOF'\nCONFIG_IIO=y\nCONFIG_IIO_BUFFER=y\nCONFIG_IIO_KFIFO_BUF=y\nCONFIG_IIO_TRIGGER=y\nEOF",
+        delay: 600,
+      },
+      {
+        type: "command",
+        text: "tree meta-my_project",
         delay: 400,
       },
       {
         type: "output",
-        text: "meta-yuhesen_ugv/",
+        text: "meta-my_project/",
       },
       {
         type: "output",
@@ -949,6 +959,22 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "output",
+        text: "    ├── linux",
+      },
+      {
+        type: "output",
+        text: "    │   ├── linux-yocto_%.bbappend",
+      },
+      {
+        type: "output",
+        text: "    │   └── linux-yocto",
+      },
+      {
+        type: "output",
+        text: "    │       └── iio.cfg",
+      },
+      {
+        type: "output",
         text: "    └── mock-adxl345",
       },
       {
@@ -961,7 +987,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "output",
-        text: "8 directories, 1 file",
+        text: "10 directories, 3 files",
         delay: 300,
       },
       {
@@ -977,7 +1003,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "cd ~/yuhesen_ugv/build && bitbake mock-adxl345",
+        text: "cd ~/my_project/build && bitbake mock-adxl345",
       },
       {
         type: "output",
@@ -1104,7 +1130,7 @@ export const terminalOutput: Record<number, TerminalSequence> = {
     lines: [
       {
         type: "command",
-        text: "bitbake yuhesen-ugv-image",
+        text: "bitbake my-project-image",
       },
       {
         type: "output",
@@ -1236,15 +1262,15 @@ export const terminalOutput: Record<number, TerminalSequence> = {
       },
       {
         type: "output",
-        text: "-rw-r--r-- 2 user user  48M Jun  8 12:30 yuhesen-ugv-image-imx8mm-lpddr4-evk.ext4",
+        text: "-rw-r--r-- 2 user user  48M Jun  8 12:30 my-project-image-imx8mm-lpddr4-evk.ext4",
       },
       {
         type: "output",
-        text: "-rw-r--r-- 2 user user  42M Jun  8 12:30 yuhesen-ugv-image-imx8mm-lpddr4-evk.tar.bz2",
+        text: "-rw-r--r-- 2 user user  42M Jun  8 12:30 my-project-image-imx8mm-lpddr4-evk.tar.bz2",
       },
       {
         type: "output",
-        text: "-rw-r--r-- 2 user user  44M Jun  8 12:30 yuhesen-ugv-image-imx8mm-lpddr4-evk.wic.bz2",
+        text: "-rw-r--r-- 2 user user  44M Jun  8 12:30 my-project-image-imx8mm-lpddr4-evk.wic.bz2",
       },
       {
         type: "output",

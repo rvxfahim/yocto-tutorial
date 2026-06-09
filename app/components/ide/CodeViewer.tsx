@@ -16,8 +16,6 @@ function highlightCode(code: string, language: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-  let result = escaped;
-
   // Keywords (C, bitbake, makefile, shell)
   const cKeywords =
     /\b(#include|#define|#ifndef|#endif|static|const|struct|enum|int|char|void|long|s64|size_t|ssize_t|unsigned|return|if|else|for|while|switch|case|default|break|continue|sizeof|NULL|true|false)\b/g;
@@ -25,7 +23,7 @@ function highlightCode(code: string, language: string): string {
     /\b(FILE|size_t|ssize_t|u8|u16|u32|u64|s8|s16|s32|s64|bool)\b/g;
   const bitbakeKeywords =
     /\b(inherit|DEPENDS|RDEPENDS|SRC_URI|LICENSE|LIC_FILES_CHKSUM|SUMMARY|DESCRIPTION|S|do_compile|do_install|FILES|KERNEL_MODULE_AUTOLOAD|IMAGE_INSTALL|IMAGE_FSTYPES|IMAGE_ROOTFS_SIZE|SYSTEMD_SERVICE|SYSTEMD_AUTO_ENABLE|BBPATH|BBFILES|BBFILE_COLLECTIONS|BBFILE_PATTERN|BBFILE_PRIORITY|LAYERDEPENDS|LAYERSERIES_COMPAT)\b/g;
-  const strings = /"([^"\\]|\\.)*"/g;
+  const stringsRe = /"((?:[^"\\]|\\.)*)"/g;
   const comments =
     /(\/\*[\s\S]*?\*\/|\/\/.*$|#.*$)/gm;
   const numbers = /\b(\d+)\b/g;
@@ -45,40 +43,70 @@ function highlightCode(code: string, language: string): string {
     bitbakeKw: "text-[#7c9ce0]",
   };
 
-  // Apply highlighting layers
-  if (language === "c") {
-    result = result.replace(comments, `<span class="${SYN.comment}">$1</span>`);
-    result = result.replace(preprocessor, `<span class="${SYN.preprocessor}">$1</span>`);
-    result = result.replace(strings, `<span class="${SYN.string}">$1</span>`);
-    result = result.replace(cKeywords, `<span class="${SYN.keyword}">$1</span>`);
-    result = result.replace(cTypes, `<span class="${SYN.type}">$1</span>`);
-    result = result.replace(numbers, `<span class="${SYN.number}">$1</span>`);
-    result = result.replace(functions, `<span class="${SYN.function}">$1</span>(`);
-  } else if (language === "bitbake") {
-    result = result.replace(comments, `<span class="${SYN.comment}">$1</span>`);
-    result = result.replace(strings, `<span class="${SYN.string}">$1</span>`);
-    result = result.replace(bitbakeKeywords, `<span class="${SYN.bitbakeKw} font-semibold">$1</span>`);
-    result = result.replace(/\$\{[^}]+\}/g, `<span class="${SYN.variable}">$&</span>`);
-  } else if (language === "makefile") {
+  // Helper: extract and protect quoted strings so later regexes
+  // (notably comments' #.*$) don't match inside generated HTML
+  // class attributes. Restore strings with highlighting at the end.
+  function protectStrings(
+    text: string,
+    processRest: (t: string) => string,
+  ): string {
+    const placeholders: string[] = [];
+    const protectedText = text.replace(stringsRe, (match) => {
+      placeholders.push(match);
+      return `\x00S${placeholders.length - 1}\x00`;
+    });
+    let result = processRest(protectedText);
+    result = result.replace(/\x00S(\d+)\x00/g, (_sub, idx) => {
+      const original = placeholders[parseInt(idx, 10)];
+      // original includes surrounding quotes; strip them for display
+      return `<span class="${SYN.string}">${original.slice(1, -1)}</span>`;
+    });
+    return result;
+  }
+
+  // Languages without string highlighting — inline processing is safe
+  // because no regex can match inside a previously generated class attr.
+  if (language === "makefile") {
+    let result = escaped;
     result = result.replace(comments, `<span class="${SYN.comment}">$1</span>`);
     result = result.replace(/\$\([^)]+\)/g, `<span class="${SYN.variable}">$&</span>`);
     result = result.replace(
       /\b(obj-m|CC|CFLAGS|TARGET|SRCS|all|clean|\.PHONY)\b/g,
       `<span class="${SYN.keyword}">$1</span>`
     );
-  } else if (language === "dts") {
-    result = result.replace(comments, `<span class="${SYN.comment}">$1</span>`);
-    result = result.replace(strings, `<span class="${SYN.string}">$1</span>`);
-    result = result.replace(
-      /\b(compatible|status|fragment|target-path|__overlay__|dts-v1|plugin)\b/g,
-      `<span class="${SYN.keyword}">$1</span>`
-    );
-  } else if (language === "ini") {
-    result = result.replace(/^\[.*\]$/gm, `<span class="${SYN.keyword}">$&</span>`);
-    result = result.replace(/^(\w+)=/gm, `<span class="${SYN.variable}">$1</span>=`);
+    return result;
   }
 
-  return result;
+  if (language === "ini") {
+    let result = escaped;
+    result = result.replace(/^\[.*\]$/gm, `<span class="${SYN.keyword}">$&</span>`);
+    result = result.replace(/^(\w+)=/gm, `<span class="${SYN.variable}">$1</span>=`);
+    return result;
+  }
+
+  // Languages with string highlighting (c, bitbake, dts) — use
+  // protectStrings so the strings regex never sees HTML tag attributes.
+  return protectStrings(escaped, (result) => {
+    if (language === "c") {
+      result = result.replace(comments, `<span class="${SYN.comment}">$1</span>`);
+      result = result.replace(preprocessor, `<span class="${SYN.preprocessor}">$1</span>`);
+      result = result.replace(cKeywords, `<span class="${SYN.keyword}">$1</span>`);
+      result = result.replace(cTypes, `<span class="${SYN.type}">$1</span>`);
+      result = result.replace(numbers, `<span class="${SYN.number}">$1</span>`);
+      result = result.replace(functions, `<span class="${SYN.function}">$1</span>(`);
+    } else if (language === "bitbake") {
+      result = result.replace(comments, `<span class="${SYN.comment}">$1</span>`);
+      result = result.replace(bitbakeKeywords, `<span class="${SYN.bitbakeKw} font-semibold">$1</span>`);
+      result = result.replace(/\$\{[^}]+\}/g, `<span class="${SYN.variable}">$&</span>`);
+    } else if (language === "dts") {
+      result = result.replace(comments, `<span class="${SYN.comment}">$1</span>`);
+      result = result.replace(
+        /\b(compatible|status|fragment|target-path|__overlay__|dts-v1|plugin)\b/g,
+        `<span class="${SYN.keyword}">$1</span>`
+      );
+    }
+    return result;
+  });
 }
 
 export default function CodeViewer({ files }: CodeViewerProps) {

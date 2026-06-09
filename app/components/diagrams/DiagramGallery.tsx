@@ -46,7 +46,7 @@ export default function DiagramGallery() {
               <p className="mt-2 text-xs">
                 Copy SVGs from{" "}
                 <code className="text-[var(--color-vscode-accent)]">
-                  /home/nafis/yuhesen_ugv/meta-yuhesen_ugv/docs/diagrams/
+                  /home/johndoe/my_project/meta-my_project/docs/diagrams/
                 </code>{" "}
                 to{" "}
                 <code className="text-[var(--color-vscode-accent)]">

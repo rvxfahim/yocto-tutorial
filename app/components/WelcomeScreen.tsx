@@ -17,7 +17,7 @@ export default function WelcomeScreen({
   hasProgress,
 }: WelcomeScreenProps) {
   return (
-    <div className="min-h-screen bg-yocto-gradient bg-yocto-pattern text-[var(--color-text-primary)] flex items-center justify-center overflow-y-auto">
+    <div className="h-dvh bg-yocto-gradient bg-yocto-pattern text-[var(--color-text-primary)] flex items-start sm:items-center justify-center overflow-y-auto pt-8 sm:pt-0">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 md:px-8 py-8 md:py-16 text-center animate-fade-in-scale max-w-full overflow-hidden">
         {/* Icon — terminal cursor */}
         <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 mb-6 sm:mb-8 rounded-2xl bg-[var(--color-surface-3)] border border-[var(--color-border)] shadow-lg">

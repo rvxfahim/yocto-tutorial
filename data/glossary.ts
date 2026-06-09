@@ -169,4 +169,18 @@ export const glossary: GlossaryEntry[] = [
     aliases: ["SSTATE_DIR", "shared state cache", "sstate"],
     category: "Tools",
   },
+  {
+    term: "bbappend",
+    definition:
+      "A file (`.bbappend`) that extends a recipe from another layer without modifying the original. It can add files, change configuration, or append to tasks. The `%` wildcard in the filename (e.g. `linux-yocto_%.bbappend`) matches any version of the base recipe. bbappend files are **manually created** by the developer — no Yocto tool auto-generates them.",
+    aliases: [".bbappend", "bbappend file"],
+    category: "Metadata",
+  },
+  {
+    term: "Kernel Config Fragment",
+    definition:
+      "A `.cfg` file containing Linux kernel configuration options (like `CONFIG_IIO=y`) that is merged into the kernel's `.config` during the build. Fragments are added to a kernel recipe via `SRC_URI += \"file://name.cfg\"` in a bbappend or recipe. They're a way to enable specific kernel features needed by your drivers without maintaining a full defconfig. These are **manually created** by the developer.",
+    aliases: [".cfg", "config fragment", "kernel fragment"],
+    category: "Kernel",
+  },
 ];

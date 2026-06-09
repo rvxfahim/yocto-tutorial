@@ -5,7 +5,7 @@ export const diagrams: DiagramMeta[] = [
     id: "architecture_overview",
     title: "Overall Architecture",
     description:
-      "High-level view of the Yuhesen UGV Yocto project: sources, custom layer, and build output.",
+      "High-level view of the My Project Yocto project: sources, custom layer, and build output.",
     svgPath: "/diagrams/architecture_overview.svg",
     stepId: 0, // Show on welcome screen
   },
@@ -29,7 +29,7 @@ export const diagrams: DiagramMeta[] = [
     id: "recipe_dependency_graph",
     title: "Recipe Dependency Graph",
     description:
-      "Dependency relationships between our custom recipes (mock-adxl345, mock-adxl345-app, yuhesen-ugv-image) and upstream layers.",
+      "Dependency relationships between our custom recipes (mock-adxl345, mock-adxl345-app, my-project-image) and upstream layers.",
     svgPath: "/diagrams/recipe_dependency_graph.svg",
     stepId: 15, // During image recipe writing
   },

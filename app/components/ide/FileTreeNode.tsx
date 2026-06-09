@@ -24,7 +24,7 @@ export default function FileTreeNodeComponent({
   onFileClick,
   activeFilePath,
 }: FileTreeNodeProps) {
-  const [expanded, setExpanded] = useState(depth < 2);
+  const [expanded, setExpanded] = useState(depth < 3);
   const fullPath = parentPath ? `${parentPath}/${node.name}` : node.name;
 
   const handleClick = useCallback(() => {

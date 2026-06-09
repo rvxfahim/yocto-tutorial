@@ -5,10 +5,39 @@
 import { StepFile } from "@/lib/types";
 
 export const codeFiles: Record<number, StepFile[]> = {
-  // ---------- Step 8: layer.conf ----------
+  // ---------- Step 8: bblayers.conf ----------
   8: [
     {
-      path: "meta-yuhesen_ugv/conf/layer.conf",
+      path: "build/conf/bblayers.conf",
+      language: "bitbake",
+      content: `# POKY_BBLAYERS_CONF_VERSION — bump if bblayers.conf changes incompatibly
+POKY_BBLAYERS_CONF_VERSION = "2"
+
+BBPATH = "\${TOPDIR}"
+BBFILES ?= ""
+
+# BBLAYERS lists all layers BitBake searches for recipes, classes, and configs.
+# Order matters — layers later in the list can override recipes from earlier
+# layers via .bbappend files or higher BBFILE_PRIORITY.
+BBLAYERS ?= " \\
+  /home/johndoe/my_project/sources/poky/meta \\
+  /home/johndoe/my_project/sources/poky/meta-poky \\
+  /home/johndoe/my_project/sources/poky/meta-yocto-bsp \\
+  /home/johndoe/my_project/sources/meta-openembedded/meta-oe \\
+  /home/johndoe/my_project/sources/meta-openembedded/meta-python \\
+  /home/johndoe/my_project/sources/meta-openembedded/meta-networking \\
+  /home/johndoe/my_project/sources/meta-freescale \\
+  /home/johndoe/my_project/sources/meta-imx/meta-bsp \\
+  /home/johndoe/my_project/meta-my_project \\
+"`,
+      active: true,
+    },
+  ],
+
+  // ---------- Step 9: Custom layer structure + layer.conf ----------
+  9: [
+    {
+      path: "meta-my_project/conf/layer.conf",
       language: "bitbake",
       content: `# We have a conf and classes directory, add to BBPATH
 BBPATH .= ":\${LAYERDIR}"
@@ -17,31 +46,50 @@ BBPATH .= ":\${LAYERDIR}"
 BBFILES += "\${LAYERDIR}/recipes-*/*/*.bb \\
             \${LAYERDIR}/recipes-*/*/*.bbappend"
 
-BBFILE_COLLECTIONS += "yuhesen-ugv"
-BBFILE_PATTERN_yuhesen-ugv = "^\${LAYERDIR}/"
-BBFILE_PRIORITY_yuhesen-ugv = "5"
+BBFILE_COLLECTIONS += "my-project"
+BBFILE_PATTERN_my-project = "^\${LAYERDIR}/"
+BBFILE_PRIORITY_my-project = "5"
 
-LAYERDEPENDS_yuhesen-ugv = "core"
-LAYERSERIES_COMPAT_yuhesen-ugv = "kirkstone"`,
+LAYERDEPENDS_my-project = "core"
+LAYERSERIES_COMPAT_my-project = "kirkstone"`,
       active: true,
+    },
+    {
+      path: "meta-my_project/recipes-kernel/linux/linux-yocto_%.bbappend",
+      language: "bitbake",
+      content: `# linux-yocto bbappend for My Project — enable IIO subsystem
+# for mock-adxl345 driver testing
+
+FILESEXTRAPATHS:prepend := "\${THISDIR}/\${PN}:"
+
+SRC_URI += "file://iio.cfg"`,
+    },
+    {
+      path: "meta-my_project/recipes-kernel/linux/linux-yocto/iio.cfg",
+      language: "ini",
+      content: `# Enable IIO subsystem for mock-adxl345 driver testing
+CONFIG_IIO=y
+CONFIG_IIO_BUFFER=y
+CONFIG_IIO_KFIFO_BUF=y
+CONFIG_IIO_TRIGGER=y`,
     },
   ],
 
   // ---------- Step 10: Kernel module source ----------
   10: [
     {
-      path: "meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
+      path: "meta-my_project/recipes-kernel/mock-adxl345/files/mock_adxl345.c",
       language: "c",
       content: `// SPDX-License-Identifier: GPL-2.0-only
 /*
  * mock_adxl345.c — Simulated ADXL345 3-axis accelerometer IIO driver
  *
- * This is a yuhesen_ugv kernel module that registers with the Linux IIO
+ * This is a my_project kernel module that registers with the Linux IIO
  * (Industrial I/O) subsystem and provides three acceleration channels
  * (X, Y, Z) with time-varying mock data. No real hardware is required.
  *
  * The driver uses the platform_driver framework and is instantiated
- * via a device tree overlay with compatible = "yuhesen_ugv,mock-adxl345".
+ * via a device tree overlay with compatible = "my_project,mock-adxl345".
  *
  * Sysfs interface:
  *   /sys/bus/iio/devices/iio:device0/name          -> "mock-adxl345"
@@ -252,13 +300,13 @@ static struct platform_driver mock_adxl345_driver = {
 
 module_platform_driver(mock_adxl345_driver);
 
-MODULE_AUTHOR("Yuhesen UGV");
+MODULE_AUTHOR("My Project");
 MODULE_DESCRIPTION("Mock ADXL345 3-axis accelerometer IIO driver");
 MODULE_LICENSE("GPL");`,
       active: true,
     },
     {
-      path: "meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/mock_adxl345.h",
+      path: "meta-my_project/recipes-kernel/mock-adxl345/files/mock_adxl345.h",
       language: "c",
       content: `/* SPDX-License-Identifier: GPL-2.0-only */
 /*
@@ -273,7 +321,7 @@ MODULE_LICENSE("GPL");`,
 #define MOCK_ADXL345_IIO_NAME          "mock-adxl345"
 
 /* Device tree compatible string */
-#define MOCK_ADXL345_COMPATIBLE        "yuhesen_ugv,mock-adxl345"
+#define MOCK_ADXL345_COMPATIBLE        "my_project,mock-adxl345"
 
 /* Default sampling frequency in Hz */
 #define MOCK_ADXL345_DEFAULT_SAMPLING_FREQ  100
@@ -295,22 +343,31 @@ enum {
   // ---------- Step 11: Makefile + DTS ----------
   11: [
     {
-      path: "meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/Makefile",
+      path: "meta-my_project/recipes-kernel/mock-adxl345/files/Makefile",
       language: "makefile",
-      content: `# Kernel module Makefile for mock-adxl345
-# This Makefile is processed by the Linux kernel build system (Kbuild)
-
-obj-m += mock_adxl345.o
-
-# If built against the kernel source tree:
-#   make -C /lib/modules/$(uname -r)/build M=$(pwd) modules
+      content: `# SPDX-License-Identifier: GPL-2.0-only
 #
-# In Yocto, the module.bbclass handles this automatically via:
-#   make -C \${STAGING_KERNEL_DIR} M=\${S} modules`,
+# Out-of-tree kernel module Makefile for mock_adxl345
+#
+# KERNEL_SRC is provided by Yocto's module.bbclass and points to the
+# kernel build tree. The kernel's kbuild system handles the rest.
+
+obj-m := mock_adxl345.o
+
+SRC := $(shell pwd)
+
+all:
+\t$(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules
+
+modules_install:
+\t$(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules_install
+
+clean:
+\t$(MAKE) -C $(KERNEL_SRC) M=$(SRC) clean`,
       active: true,
     },
     {
-      path: "meta-yuhesen_ugv/recipes-kernel/mock-adxl345/files/mock-adxl345.dts",
+      path: "meta-my_project/recipes-kernel/mock-adxl345/files/mock-adxl345.dts",
       language: "dts",
       content: `// Device tree overlay for the mock-adxl345 platform device
 // This creates a virtual device that our driver binds to.
@@ -322,13 +379,13 @@ obj-m += mock_adxl345.o
 /plugin/;
 
 / {
-\tcompatible = "yuhesen_ugv,mock-adxl345";
+\tcompatible = "my_project,mock-adxl345";
 
 \tfragment@0 {
 \t\ttarget-path = "/";
 \t\t__overlay__ {
 \t\t\tmock_adxl345: mock-adxl345 {
-\t\t\t\tcompatible = "yuhesen_ugv,mock-adxl345";
+\t\t\t\tcompatible = "my_project,mock-adxl345";
 \t\t\t\tstatus = "okay";
 \t\t\t};
 \t\t};
@@ -340,7 +397,7 @@ obj-m += mock_adxl345.o
   // ---------- Step 12: Kernel module recipe ----------
   12: [
     {
-      path: "meta-yuhesen_ugv/recipes-kernel/mock-adxl345/mock-adxl345_1.0.bb",
+      path: "meta-my_project/recipes-kernel/mock-adxl345/mock-adxl345_1.0.bb",
       language: "bitbake",
       content: `SUMMARY = "Mock ADXL345 IIO accelerometer driver"
 DESCRIPTION = "An out-of-tree Linux kernel module that simulates an ADXL345 \\
@@ -387,7 +444,7 @@ FILES:\${PN} += "/boot/overlays/mock-adxl345.dtbo"`,
   // ---------- Step 13: User-space reader ----------
   13: [
     {
-      path: "meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
+      path: "meta-my_project/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.c",
       language: "c",
       content: `// SPDX-License-Identifier: MIT
 /*
@@ -549,7 +606,7 @@ int main(void)
   // ---------- Step 14: User-space app recipe ----------
   14: [
     {
-      path: "meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/mock-adxl345-app.bb",
+      path: "meta-my_project/recipes-apps/mock-adxl345-app/mock-adxl345-app.bb",
       language: "bitbake",
       content: `SUMMARY = "Mock ADXL345 IIO reader application"
 DESCRIPTION = "A simple terminal application that reads acceleration data \\
@@ -596,7 +653,7 @@ FILES:\${PN} += "\${systemd_system_unitdir}/mock-adxl345-reader.service"`,
       active: true,
     },
     {
-      path: "meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.service",
+      path: "meta-my_project/recipes-apps/mock-adxl345-app/files/mock-adxl345-reader.service",
       language: "ini",
       content: `[Unit]
 Description=Mock ADXL345 IIO Reader
@@ -614,7 +671,7 @@ StandardError=journal
 WantedBy=multi-user.target`,
     },
     {
-      path: "meta-yuhesen_ugv/recipes-apps/mock-adxl345-app/files/Makefile",
+      path: "meta-my_project/recipes-apps/mock-adxl345-app/files/Makefile",
       language: "makefile",
       content: `# User-space Makefile for mock-adxl345-reader
 # A simple C application — just compile and link.
@@ -640,9 +697,9 @@ clean:
   // ---------- Step 15: Image recipe ----------
   15: [
     {
-      path: "meta-yuhesen_ugv/recipes-core/images/yuhesen-ugv-image.bb",
+      path: "meta-my_project/recipes-core/images/my-project-image.bb",
       language: "bitbake",
-      content: `SUMMARY = "Yuhesen UGV Image with mock-adxl345 driver"
+      content: `SUMMARY = "My Project Image with mock-adxl345 driver"
 DESCRIPTION = "Minimal bootable image for the i.MX8M Mini EVK that includes \\
 the mock-adxl345 out-of-tree kernel module and its device tree overlay."
 LICENSE = "MIT"
@@ -681,8 +738,8 @@ BB_NUMBER_THREADS = "32"
 PARALLEL_MAKE = "-j 32"
 
 # Shared download and sstate caches (saves time across rebuilds)
-DL_DIR = "/home/nafis/yuhesen_ugv/downloads"
-SSTATE_DIR = "/home/nafis/yuhesen_ugv/sstate-cache"
+DL_DIR = "/home/johndoe/my_project/downloads"
+SSTATE_DIR = "/home/johndoe/my_project/sstate-cache"
 
 # Accept NXP/Freescale EULA (required for GPU, VPU firmware)
 ACCEPT_FSL_EULA = "1"
@@ -702,15 +759,15 @@ BBPATH = "\${TOPDIR}"
 BBFILES ?= ""
 
 BBLAYERS ?= " \\
-  /home/nafis/yuhesen_ugv/sources/poky/meta \\
-  /home/nafis/yuhesen_ugv/sources/poky/meta-poky \\
-  /home/nafis/yuhesen_ugv/sources/poky/meta-yocto-bsp \\
-  /home/nafis/yuhesen_ugv/sources/meta-openembedded/meta-oe \\
-  /home/nafis/yuhesen_ugv/sources/meta-openembedded/meta-python \\
-  /home/nafis/yuhesen_ugv/sources/meta-openembedded/meta-networking \\
-  /home/nafis/yuhesen_ugv/sources/meta-freescale \\
-  /home/nafis/yuhesen_ugv/sources/meta-imx/meta-imx \\
-  /home/nafis/yuhesen_ugv/meta-yuhesen_ugv \\
+  /home/johndoe/my_project/sources/poky/meta \\
+  /home/johndoe/my_project/sources/poky/meta-poky \\
+  /home/johndoe/my_project/sources/poky/meta-yocto-bsp \\
+  /home/johndoe/my_project/sources/meta-openembedded/meta-oe \\
+  /home/johndoe/my_project/sources/meta-openembedded/meta-python \\
+  /home/johndoe/my_project/sources/meta-openembedded/meta-networking \\
+  /home/johndoe/my_project/sources/meta-freescale \\
+  /home/johndoe/my_project/sources/meta-imx/meta-imx \\
+  /home/johndoe/my_project/meta-my_project \\
 "`,
     },
   ],

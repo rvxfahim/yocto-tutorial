@@ -45,7 +45,10 @@ export function useTerminal(onWrite: (text: string) => void) {
         if (line.type === "command") {
           // Type out the command character by character
           onWrite(prompt);
-          for (const ch of line.text) {
+          // Normalize line breaks: \n → \r\n so xterm.js moves to column 0
+          // before the next line (avoids continuation lines starting mid-row)
+          const normalizedText = line.text.replace(/\n/g, "\r\n");
+          for (const ch of normalizedText) {
             if (abortRef.current) {
               setPlaybackState("idle");
               return;
@@ -61,7 +64,8 @@ export function useTerminal(onWrite: (text: string) => void) {
           });
         } else {
           // Output lines — print with a short delay between lines for realism
-          onWrite(line.text + "\r\n");
+          const normalizedText = line.text.replace(/\n/g, "\r\n");
+          onWrite(normalizedText + "\r\n");
           await new Promise((r) => {
             timeoutRef.current = setTimeout(r, delay);
           });
@@ -103,7 +107,8 @@ export function useTerminal(onWrite: (text: string) => void) {
 
         if (line.type === "command") {
           onWrite(prompt);
-          for (const ch of line.text) {
+          const normalizedText = line.text.replace(/\n/g, "\r\n");
+          for (const ch of normalizedText) {
             if (abortRef.current) {
               setPlaybackState("idle");
               return;
@@ -118,7 +123,8 @@ export function useTerminal(onWrite: (text: string) => void) {
             timeoutRef.current = setTimeout(r, 100 / speedMultiplier);
           });
         } else {
-          onWrite(line.text + "\r\n");
+          const normalizedText = line.text.replace(/\n/g, "\r\n");
+          onWrite(normalizedText + "\r\n");
           await new Promise((r) => {
             timeoutRef.current = setTimeout(r, delay);
           });

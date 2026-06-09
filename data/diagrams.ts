@@ -6,7 +6,7 @@ export const diagrams: DiagramMeta[] = [
     title: "Overall Architecture",
     description:
       "High-level view of the My Project Yocto project: sources, custom layer, and build output.",
-    svgPath: "/diagrams/architecture_overview.svg",
+    svgPath: "/yocto-tutorial/diagrams/architecture_overview.svg",
     stepId: 0, // Show on welcome screen
   },
   {
@@ -14,7 +14,7 @@ export const diagrams: DiagramMeta[] = [
     title: "Build Flow Sequence",
     description:
       "Sequence diagram showing the Yocto build process: fetch, configure, compile, package, and assemble the final image.",
-    svgPath: "/diagrams/build_flow_sequence.svg",
+    svgPath: "/yocto-tutorial/diagrams/build_flow_sequence.svg",
     stepId: 16, // Show during build step
   },
   {
@@ -22,7 +22,7 @@ export const diagrams: DiagramMeta[] = [
     title: "Deployment Diagram",
     description:
       "How the built image is deployed to the i.MX8M Mini EVK: SD card layout, boot flow, and partition structure.",
-    svgPath: "/diagrams/deployment_diagram.svg",
+    svgPath: "/yocto-tutorial/diagrams/deployment_diagram.svg",
     stepId: 20, // Show at completion
   },
   {
@@ -30,7 +30,7 @@ export const diagrams: DiagramMeta[] = [
     title: "Recipe Dependency Graph",
     description:
       "Dependency relationships between our custom recipes (mock-adxl345, mock-adxl345-app, my-project-image) and upstream layers.",
-    svgPath: "/diagrams/recipe_dependency_graph.svg",
+    svgPath: "/yocto-tutorial/diagrams/recipe_dependency_graph.svg",
     stepId: 15, // During image recipe writing
   },
   {
@@ -38,7 +38,7 @@ export const diagrams: DiagramMeta[] = [
     title: "Runtime Data Flow",
     description:
       "How sensor data flows at runtime: kernel module → IIO sysfs → user-space reader → terminal output.",
-    svgPath: "/diagrams/runtime_data_flow.svg",
+    svgPath: "/yocto-tutorial/diagrams/runtime_data_flow.svg",
     stepId: 13, // During user-space reader writing
   },
   {
@@ -46,7 +46,7 @@ export const diagrams: DiagramMeta[] = [
     title: "Device Tree + Driver Binding",
     description:
       "How the device tree overlay binds to the mock-adxl345 platform driver at boot time, showing the compatible string matching mechanism.",
-    svgPath: "/diagrams/device_tree_binding.svg",
+    svgPath: "/yocto-tutorial/diagrams/device_tree_binding.svg",
     stepId: 11, // During device tree overlay writing
   },
 ];

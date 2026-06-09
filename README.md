@@ -149,7 +149,7 @@ The entire app is compiled to static HTML/CSS/JS in `out/` — serve it from any
 **Prerequisites:** Node.js 18 or later.
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/rvxfahim/yocto-tutorial
 cd yocto-tutorial
 npm install
 npm run dev        # Development server at http://localhost:3000
